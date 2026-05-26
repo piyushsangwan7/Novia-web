@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StreamVault</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+<!-- <style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --red: #e50914;
+    --bg: #0d0d0d;
+    --surface: #161616;
+    --card: #1c1c1c;
+    --border: #2a2a2a;
+    --text: #f1f1f1;
+    --muted: #888;
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    height: 100vh;
+    display: flex;
+    overflow: hidden;
+  }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    width: 56px;
+    background: #111;
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 16px 0;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+  .sidebar-logo {
+    width: 32px; height: 32px;
+    background: var(--red);
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px; color: #fff;
+    margin-bottom: 16px;
+  }
+  .sidebar-icon {
+    width: 38px; height: 38px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    color: var(--muted);
+    transition: all .2s;
+    font-size: 17px;
+    user-select: none;
+  }
+  .sidebar-icon:hover { background: var(--card); color: var(--text); }
+  .sidebar-icon.active { background: var(--red); color: #fff; }
+  .sidebar-spacer { flex: 1; }
+  .sidebar-avatar {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #e50914, #ff6b35);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 600;
+    cursor: pointer;
+    margin-top: 8px;
+  }
+
+  /* ── MAIN ── */
+  .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+  /* ── TABS ── */
+  .top-tabs {
+    display: flex; align-items: center; gap: 4px;
+    padding: 10px 20px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    flex-shrink: 0;
+  }
+  .tab {
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-size: 12.5px; font-weight: 500;
+    cursor: pointer; color: var(--muted);
+    transition: all .2s;
+    user-select: none;
+  }
+  .tab:hover { color: var(--text); background: var(--card); }
+  .tab.active { background: var(--red); color: #fff; }
+
+  /* ── CONTENT ── */
+  .content {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 220px;
+    overflow: hidden;
+  }
+
+  .feed {
+    overflow-y: auto;
+    padding: 20px;
+    display: flex; flex-direction: column; gap: 22px;
+  }
+  .feed::-webkit-scrollbar { width: 4px; }
+  .feed::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative;
+    border-radius: 16px; overflow: hidden;
+    height: 220px;
+    background: linear-gradient(110deg, #1a0000 0%, #3d0000 40%, #0d0d0d 100%);
+    flex-shrink: 0;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse at 30% 50%, rgba(229,9,20,.35) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 20%, rgba(180,10,20,.2) 0%, transparent 50%);
+  }
+  .hero-faces {
+    position: absolute; right: 0; top: 0; bottom: 0;
+    width: 65%; display: flex; overflow: hidden;
+  }
+  .face-card { flex: 1; position: relative; overflow: hidden; }
+  .face-card .face-img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+  }
+  /* If no real image — show gradient fallback */
+  .face-card .face-img[src=""] , .face-card .face-img:not([src]) {
+    display: none;
+  }
+  .face-grad {
+    width: 100%; height: 100%;
+    position: absolute; inset: 0;
+  }
+  .face-card::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(to right, rgba(26,0,0,.9) 0%, transparent 40%);
+    z-index: 1;
+  }
+  .hero-content {
+    position: absolute; bottom: 20px; left: 20px; z-index: 2;
+  }
+  .hero-meta { display: flex; gap: 10px; margin-bottom: 6px; font-size: 11px; color: var(--muted); align-items: center; }
+  .badge {
+    background: var(--red); color: #fff;
+    font-size: 10px; padding: 1px 6px;
+    border-radius: 3px; font-weight: 600;
+  }
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 44px; line-height: .93;
+    letter-spacing: 1px;
+    text-shadow: 0 2px 20px rgba(0,0,0,.8);
+  }
+  .hero-title span { color: var(--red); }
+  .hero-desc {
+    margin: 8px 0 12px;
+    font-size: 11.5px; color: var(--muted);
+    max-width: 230px; line-height: 1.5;
+  }
+  .btn-watch {
+    display: inline-flex; align-items: center; gap: 7px;
+    background: var(--red); color: #fff;
+    border: none; padding: 8px 18px;
+    border-radius: 8px; font-size: 13px; font-weight: 600;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer; transition: background .2s;
+  }
+  .btn-watch:hover { background: #c4070f; }
+
+  /* ── SECTION HEADER ── */
+  .section-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 12px;
+  }
+  .section-title { font-size: 14px; font-weight: 600; }
+  .see-all { font-size: 11.5px; color: var(--red); cursor: pointer; }
+
+  /* ── CONTINUE WATCHING ── */
+  .cw-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  .cw-card {
+    border-radius: 12px; overflow: hidden;
+    background: var(--card); cursor: pointer;
+    transition: transform .2s; position: relative;
+  }
+  .cw-card:hover { transform: scale(1.02); }
+  .cw-thumb { height: 120px; position: relative; overflow: hidden; }
+  .cw-thumb .thumb-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .cw-thumb .thumb-grad { position: absolute; inset: 0; }
+  .cw-overlay {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(0,0,0,.3);
+    opacity: 0; transition: opacity .2s;
+  }
+  .cw-card:hover .cw-overlay { opacity: 1; }
+  .play-btn {
+    width: 36px; height: 36px;
+    background: rgba(229,9,20,.9);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-size: 12px;
+  }
+  .cw-info { padding: 8px 10px; }
+  .cw-info .title { font-size: 12px; font-weight: 600; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .cw-info .sub { font-size: 10.5px; color: var(--muted); }
+  .progress-bar { height: 2px; background: var(--border); border-radius: 2px; margin-top: 6px; }
+  .progress-fill { height: 100%; background: var(--red); border-radius: 2px; }
+
+  /* ── TOP PICKS ── */
+  .picks-row { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 4px; }
+  .picks-row::-webkit-scrollbar { height: 3px; }
+  .picks-row::-webkit-scrollbar-thumb { background: var(--border); }
+  .pick-card {
+    flex-shrink: 0; width: 130px;
+    border-radius: 10px; overflow: hidden;
+    background: var(--card); cursor: pointer;
+    transition: transform .2s; position: relative;
+  }
+  .pick-card:hover { transform: scale(1.03); }
+  .pick-thumb { height: 80px; overflow: hidden; position: relative; }
+  .pick-thumb .thumb-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .pick-thumb .thumb-grad { position: absolute; inset: 0; }
+  .pick-body { padding: 7px 8px; }
+  .pick-name { font-size: 11.5px; font-weight: 600; }
+  .pick-genre { font-size: 10px; color: var(--muted); margin-top: 2px; }
+  .pick-badge {
+    position: absolute; top: 6px; left: 6px;
+    background: rgba(0,0,0,.7);
+    border: 1px solid rgba(255,255,255,.15);
+    color: #fff; font-size: 9px;
+    padding: 2px 5px; border-radius: 4px;
+  }
+  .pick-toggle {
+    position: absolute; top: 6px; right: 6px;
+    width: 28px; height: 16px;
+    background: var(--red); border-radius: 8px;
+    display: flex; align-items: center; justify-content: flex-end;
+    padding: 2px;
+  }
+  .pick-toggle .knob { width: 12px; height: 12px; background: #fff; border-radius: 50%; }
+
+  /* ── RIGHT PANEL ── */
+  .right-panel {
+    border-left: 1px solid var(--border);
+    background: var(--surface);
+    display: flex; flex-direction: column;
+    overflow-y: auto;
+  }
+  .right-panel::-webkit-scrollbar { width: 0; }
+
+  .browse-section { padding: 16px; border-bottom: 1px solid var(--border); }
+  .browse-label {
+    font-size: 11px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: .5px;
+    color: var(--muted); margin-bottom: 12px;
+  }
+  .genre-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 0; cursor: pointer; border-radius: 8px;
+    transition: padding .15s;
+  }
+  .genre-item:hover { padding-left: 6px; }
+  .genre-thumb { width: 36px; height: 36px; border-radius: 8px; overflow: hidden; flex-shrink: 0; position: relative; }
+  .genre-thumb .thumb-grad { position: absolute; inset: 0; }
+  .genre-info .name { font-size: 12.5px; font-weight: 600; }
+  .genre-info .count { font-size: 10.5px; color: var(--muted); }
+  .genre-arrow { margin-left: auto; color: var(--muted); font-size: 13px; }
+  .explore-btn {
+    width: 100%; margin-top: 10px;
+    background: var(--card); border: 1px solid var(--border);
+    color: var(--text); padding: 8px;
+    border-radius: 8px; font-size: 12px; font-weight: 600;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer; transition: background .2s; letter-spacing: .3px;
+  }
+  .explore-btn:hover { background: var(--border); }
+
+  /* ── NOW PLAYING ── */
+  .now-playing { padding: 16px; flex: 1; }
+  .np-label { font-size: 11px; text-transform: uppercase; letter-spacing: .5px; color: var(--muted); font-weight: 600; margin-bottom: 12px; }
+  .np-card { border-radius: 12px; overflow: hidden; background: var(--card); position: relative; }
+  .np-thumb { height: 130px; overflow: hidden; position: relative; }
+  .np-thumb .thumb-grad { position: absolute; inset: 0; }
+  .np-toggle {
+    position: absolute; top: 10px; right: 10px;
+    width: 30px; height: 17px;
+    background: var(--red); border-radius: 9px;
+    display: flex; align-items: center; justify-content: flex-end;
+    padding: 2px 3px; cursor: pointer; z-index: 2;
+  }
+  .np-toggle .knob { width: 13px; height: 13px; background: #fff; border-radius: 50%; }
+  .np-overlay {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    background: linear-gradient(to top, rgba(0,0,0,.95) 0%, transparent 100%);
+    padding: 12px; z-index: 1;
+  }
+  .np-name { font-size: 13px; font-weight: 700; }
+  .np-sub { font-size: 10.5px; color: var(--muted); margin: 2px 0 8px; }
+  .np-controls { display: flex; align-items: center; gap: 8px; }
+  .np-ctrl { font-size: 13px; color: var(--muted); cursor: pointer; user-select: none; }
+  .np-play-btn {
+    width: 28px; height: 28px;
+    background: var(--red); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; cursor: pointer;
+  }
+  .np-dots { display: flex; gap: 4px; margin-left: auto; }
+  .np-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--muted); }
+  .np-dot.active { background: var(--red); }
+  .np-progress { margin-top: 8px; height: 2px; background: rgba(255,255,255,.15); border-radius: 2px; }
+  .np-progress-fill { height: 100%; width: 40%; background: var(--red); border-radius: 2px; }
+
+  /* ── GRADIENT HELPERS ── */
+  .g-st  { background: linear-gradient(135deg, #8b1a1a, #2d1b1b, #1a0a0a); }
+  .g-st2 { background: linear-gradient(135deg, #0a1a2d, #1a1a3d, #0d0d1a); }
+  .g-st3 { background: linear-gradient(135deg, #1a0800, #3d1500, #8b3a00); }
+  .g-dp  { background: linear-gradient(135deg, #8b0000, #1a1a1a, #cc0000); }
+  .g-mu  { background: linear-gradient(135deg, #1a0a2d, #3d1a5a, #1a0d2d); }
+  .g-ac  { background: linear-gradient(135deg, #1a2d3d, #0a1a2d, #2d1a0a); }
+  .g-dr  { background: linear-gradient(135deg, #1a2d1a, #0a1a0a, #2d2d0a); }
+  .g-th  { background: linear-gradient(135deg, #1a0a0a, #2d0a0a, #1a1a1a); }
+  .g-co  { background: linear-gradient(135deg, #2d2d0a, #1a2d0a, #3d3d0a); }
+  .g-op  { background: linear-gradient(135deg, #2d1a0a, #5a3000, #3d1a00); }
+  .g-tg  { background: linear-gradient(135deg, #001a2d, #002d5a, #0a1a3d); }
+</style> -->
+</head>
+<body>
+
+<!-- ═══ SIDEBAR ═══ -->
+<nav class="sidebar">
+  <div class="sidebar-logo">SV</div>
+  <div class="sidebar-icon active">&#9783;</div>
+  <div class="sidebar-icon">&#9906;</div>
+  <div class="sidebar-icon">&#9825;</div>
+  <div class="sidebar-icon">&#8659;</div>
+  <div class="sidebar-icon">&#9881;</div>
+  <div class="sidebar-spacer"></div>
+  <div class="sidebar-avatar">P</div>
+</nav>
+
+<!-- ═══ MAIN ═══ -->
+<div class="main">
+
+  <!-- TABS -->
+  <div class="top-tabs">
+    <div class="tab active">Now Streaming</div>
+    <div class="tab">HBO &middot; S2</div>
+    <div class="tab">Watch Back</div>
+    <div class="tab">2h 8m</div>
+    <div class="tab">Top 10 Today</div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- ── FEED ── -->
+    <div class="feed">
+
+      <!-- HERO BANNER -->
+      <div class="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-faces">
+          <div class="face-card">
+            <!--
+              TO USE REAL IMAGES:
+              Replace the div below with:
+              <img class="face-img" src="your-image-url.jpg" alt="">
+            -->
+            <div class="face-grad g-st"></div>
+          </div>
+          <div class="face-card">
+            <div class="face-grad g-st2"></div>
+          </div>
+          <div class="face-card">
+            <div class="face-grad g-st3"></div>
+          </div>
+        </div>
+        <div class="hero-content">
+          <div class="hero-meta">
+            <span class="badge">4K</span>
+            <span>&#9733; 9.2</span>
+            <span>2h 31m</span>
+            <span class="badge" style="background:#222;border:1px solid #444;">TV-14</span>
+          </div>
+          <div class="hero-title">STRANGER<br><span>THINGS</span></div>
+          <p class="hero-desc">When a mysterious force arrives, four friends uncover a terrifying government conspiracy and supernatural forces.</p>
+          <button class="btn-watch">&#9654;&nbsp; Watch Now</button>
+        </div>
+      </div>
+
+      <!-- CONTINUE WATCHING -->
+      <div>
+        <div class="section-header">
+          <span class="section-title">Continue Watching</span>
+          <span class="see-all">See All &rarr;</span>
+        </div>
+        <div class="cw-grid">
+
+          <div class="cw-card">
+            <div class="cw-thumb">
+              <div class="thumb-grad g-dr"></div>
+              <div class="cw-overlay"><div class="play-btn">&#9654;</div></div>
+            </div>
+            <div class="cw-info">
+              <div class="title">Dune: Part Two</div>
+              <div class="sub">1:10:35 &middot; 34 min left</div>
+              <div class="progress-bar"><div class="progress-fill" style="width:68%"></div></div>
+            </div>
+          </div>
+
+          <div class="cw-card">
+            <div class="cw-thumb">
+              <div class="thumb-grad g-dp"></div>
+              <div class="cw-overlay"><div class="play-btn">&#9654;</div></div>
+            </div>
+            <div class="cw-info">
+              <div class="title">Deadpool</div>
+              <div class="sub">0:45:00 &middot; 62 min left</div>
+              <div class="progress-bar"><div class="progress-fill" style="width:42%"></div></div>
+            </div>
+          </div>
+
+          <div class="cw-card">
+            <div class="cw-thumb">
+              <div class="thumb-grad g-mu"></div>
+              <div class="cw-overlay"><div class="play-btn">&#9654;</div></div>
+            </div>
+            <div class="cw-info">
+              <div class="title">Mulan</div>
+              <div class="sub">0:22:10 &middot; 90 min left</div>
+              <div class="progress-bar"><div class="progress-fill" style="width:20%"></div></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- TOP PICKS -->
+      <div>
+        <div class="section-header">
+          <span class="section-title">Top Pick for You</span>
+          <span class="see-all">See All &rarr;</span>
+        </div>
+        <div class="picks-row">
+
+          <div class="pick-card">
+            <div class="pick-thumb"><div class="thumb-grad g-ac"></div></div>
+            <div class="pick-body">
+              <div class="pick-name">Avengers: EG</div>
+              <div class="pick-genre">Action &middot; 2019</div>
+            </div>
+            <div class="pick-badge">HD</div>
+          </div>
+
+          <div class="pick-card">
+            <div class="pick-thumb"><div class="thumb-grad g-dp"></div></div>
+            <div class="pick-body">
+              <div class="pick-name">Deadpool</div>
+              <div class="pick-genre">Action &middot; 2022</div>
+            </div>
+            <div class="pick-toggle"><div class="knob"></div></div>
+          </div>
+
+          <div class="pick-card">
+            <div class="pick-thumb"><div class="thumb-grad g-op"></div></div>
+            <div class="pick-body">
+              <div class="pick-name">Oppenheimer</div>
+              <div class="pick-genre">Drama &middot; 2023</div>
+            </div>
+            <div class="pick-badge">4K</div>
+          </div>
+
+          <div class="pick-card">
+            
+            <div class="pick-thumb"><div class="thumb-grad g-tg"></div></div>
+            <div class="pick-body">
+              <div class="pick-name">Top Gun</div>
+              <div class="pick-genre">Action &middot; 2022</div>
+            </div>
+          </div>
+
+          <div class="pick-card">
+            <div class="pick-thumb"><div class="thumb-grad g-th"></div></div>
+            <div class="pick-body">
+              <div class="pick-name">The Batman</div>
+              <div class="pick-genre">Thriller &middot; 2022</div>
+            </div>
+            <div class="pick-badge">HD</div>
+          </div>
+
+        </div>
+      </div>
+
+    </div><!-- /feed -->
+
+    <!-- ── RIGHT PANEL ── -->
+    <div class="right-panel">
+
+      <!-- BROWSE -->
+      <div class="browse-section">
+        <div class="browse-label">Browse</div>
+
+        <div class="genre-item">
+          <div class="genre-thumb"><div class="thumb-grad g-ac"></div></div>
+          <div class="genre-info"><div class="name">Action</div><div class="count">128 titles</div></div>
+          <div class="genre-arrow">&rsaquo;</div>
+        </div>
+
+        <div class="genre-item">
+          <div class="genre-thumb"><div class="thumb-grad g-dr"></div></div>
+          <div class="genre-info"><div class="name">Drama</div><div class="count">96 titles</div></div>
+          <div class="genre-arrow">&rsaquo;</div>
+        </div>
+
+        <div class="genre-item">
+          <div class="genre-thumb"><div class="thumb-grad g-th"></div></div>
+          <div class="genre-info"><div class="name">Thriller</div><div class="count">42 titles</div></div>
+          <div class="genre-arrow">&rsaquo;</div>
+        </div>
+
+        <div class="genre-item">
+          <div class="genre-thumb"><div class="thumb-grad g-co"></div></div>
+          <div class="genre-info"><div class="name">Comedy</div><div class="count">87 titles</div></div>
+          <div class="genre-arrow">&rsaquo;</div>
+        </div>
+
+        <button class="explore-btn">EXPLORE MORE</button>
+      </div>
+
+      <!-- NOW PLAYING -->
+      <div class="now-playing">
+        <div class="np-label">Now Playing</div>
+        <div class="np-card">
+          <div class="np-thumb">
+            <div class="thumb-grad g-mu" style="height:130px"></div>
+          </div>
+          <div class="np-toggle"><div class="knob"></div></div>
+          <div class="np-overlay">
+            <div class="np-name">Mulan</div>
+            <div class="np-sub">Wednesday &middot; 9:34 PM</div>
+            <div class="np-controls">
+              <span class="np-ctrl">&#9664;&#9664;</span>
